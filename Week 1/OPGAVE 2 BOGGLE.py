@@ -20,7 +20,7 @@ def find(gx, gy, position, traveled):
         return found_words
     for bx, by in neighbours:
         rx, ry = gx + bx, gy + by
-        # changed the coordinates to it can loop around the board
+        # changed the coordinates so it can loop around the board
         if rx < 0:
             rx = len(board) - 1
         if ry < 0:
@@ -42,6 +42,7 @@ def solve():
     # get the coordinates of the board
     for x in range(len(board)):
         for y in range(len(board)):
+            # find all words for coordinates 0,0 | 0,1 | ...
             result += find(x, y, board[x][y], {(x, y)})
     return set(result)
 
