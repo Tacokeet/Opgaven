@@ -20,7 +20,7 @@ def find(gx, gy, position, traveled):
         return found_words
     for bx, by in neighbours:
         rx, ry = gx + bx, gy + by
-        # if rx or ry are higher or lower than the board size it gives them the other side of the board
+        # changed the coordinates to it can loop around the board
         if rx < 0:
             rx = len(board) - 1
         if ry < 0:
