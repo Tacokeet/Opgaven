@@ -4,11 +4,14 @@ prefixes = []
 neighbours = [(0, -1), (-1, 0), (1, 0), (0, 1)]
 file = open('words.txt', 'r')
 words = [line.split() for line in file.readlines()]
+seen_prefixes = set(prefixes)
 
 # Create prefixed list
 for word in words:
     for number in range(len(word[0])):
-        prefixes.append(word[0][0:number])
+        if word[0][0:number] not in seen_prefixes:
+            seen_prefixes.add(word[0][0:number])
+            prefixes.append(word[0][0:number])
 
 
 # find all possible words
@@ -34,7 +37,7 @@ def find(gx, gy, position, traveled):
             # give the  neighbour letter to the function and repeat!
             found_words.extend(find(rx, ry, position + board[rx][ry], traveled))
             traveled.remove((rx, ry))
-    return list(set(found_words))
+    return found_words
 
 
 def solve():
@@ -44,7 +47,7 @@ def solve():
         for y in range(len(board)):
             # find all words for coordinates 0,0 | 0,1 | ...
             result += find(x, y, board[x][y], {(x, y)})
-    return set(result)
+    return result
 
 
-print((solve()))
+print(solve())
