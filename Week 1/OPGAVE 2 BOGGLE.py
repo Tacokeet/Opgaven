@@ -1,10 +1,33 @@
+import time
+import string
+import random
+
+# Start the timer to setup board
+before_words_time = time.time()
+print('\033[95mGoing through words... \033[0m')
+
 # Variables
-board = [['P', 'I', 'E', 'T'], ['G', 'A', 'A', 'T'], ['A', 'T', 'M', 'S'], ['H', 'U', 'I', 'S']]
+# board = [['P', 'I', 'E', 'T', 'A'], ['G', 'A', 'A', 'T', 'E'], ['A', 'T', 'M', 'S', 'F'], ['H', 'U', 'I', 'S', 'A']]
 prefixes = []
 neighbours = [(0, -1), (-1, 0), (1, 0), (0, 1)]
 file = open('words.txt', 'r')
 words = [line.split() for line in file.readlines()]
 seen_prefixes = set(prefixes)
+n = 4
+board = []
+for x in range(n):
+    board.append([random.choice(string.ascii_letters)])
+    for y in range(n-1):
+        board[x].append(random.choice(string.ascii_letters))
+
+# Stop the timer
+after_words_time = time.time()
+print('Done preparing in: ')
+print(after_words_time - before_words_time)
+
+# Start the timer for doing the job
+before_time = time.time()
+print('\033[95mLooking for words in the board...\033[0m')
 
 # Create prefixed list
 for word in words:
@@ -46,8 +69,13 @@ def solve():
     for x in range(len(board)):
         for y in range(len(board)):
             # find all words for coordinates 0,0 | 0,1 | ...
+            # print(x, y)
             result += find(x, y, board[x][y], {(x, y)})
     return result
 
 
 print(solve())
+
+# Stop the timer
+after_time = time.time()
+print('Done looking in: \033[92m {} \033[0m'.format(after_time - before_time))
