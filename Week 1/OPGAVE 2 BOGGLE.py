@@ -16,9 +16,9 @@ seen_prefixes = set(prefixes)
 n = 4
 board = []
 for x in range(n):
-    board.append([random.choice(string.ascii_letters)])
+    board.append([random.choice(string.ascii_letters).lower()])
     for y in range(n-1):
-        board[x].append(random.choice(string.ascii_letters))
+        board[x].append(random.choice(string.ascii_letters).lower())
 
 # Stop the timer
 after_words_time = time.time()
