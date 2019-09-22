@@ -1,5 +1,5 @@
-import Tkinter as tk
-from Tkinter import ttk
+import tkinter as tk
+from tkinter import ttk
 import model as mo
 import config as cf
 

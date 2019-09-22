@@ -1,0 +1,8 @@
+Hoeveel procent ligt het resultaat van NN af van de optimale route?
+10%
+
+Hoe lang doet het NN-programma over een route met 500 steden en wat is de totale lengte van de route?
+500 city tour with length 20216.6 in 0.122 secs for nearest_neighbour
+
+Hoeveel paren takken zijn er in een route van N steden?
+Beschrijf op welke manier je kruisende wegen (takken) kan vinden
