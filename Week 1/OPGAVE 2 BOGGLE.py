@@ -22,6 +22,14 @@ seen_prefixes = set(prefixes)
 for b in board:
     print(b)
 
+# This bit of code can be used to fill an empty board with random letters for n amount
+# n = 100
+# board = []
+# for x in range(n):
+#     board.append([random.choice(string.ascii_letters).lower()])
+#     for y in range(n-1):
+#         board[x].append(random.choice(string.ascii_letters).lower())
+
 # Stop the timer
 after_words_time = time.time()
 print('Done preparing in: ')

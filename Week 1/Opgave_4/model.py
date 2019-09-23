@@ -47,18 +47,19 @@ def set_grid_value(node, value):
 
 def successors(node):
     successors = []
-    # Naar zuid
-    if node[1] < cf.SIZE -1 and get_grid_value((node[0], node[1] + 1)) != 'b':
-        successors.append((node[0], node[1] + 1))
-    # Naar noord
-    if node[1] > 0 and get_grid_value((node[0], node[1] - 1)) != 'b':
-        successors.append((node[0], node[1] - 1))
     # Naar oost
     if node[0] < cf.SIZE -1 and get_grid_value((node[0] + 1, node[1])) != 'b':
         successors.append((node[0] + 1, node[1]))
     # Naar west
     if node[0] > 0 and get_grid_value((node[0] - 1, node[1])) != 'b':
         successors.append((node[0] - 1, node[1]))
+    # Naar zuid
+    if node[1] < cf.SIZE -1 and get_grid_value((node[0], node[1] + 1)) != 'b':
+        successors.append((node[0], node[1] + 1))
+    # Naar noord
+    if node[1] > 0 and get_grid_value((node[0], node[1] - 1)) != 'b':
+        successors.append((node[0], node[1] - 1))
+
 
     return successors
 

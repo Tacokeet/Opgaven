@@ -1,5 +1,11 @@
-import tkinter as tk
-from tkinter import ttk
+# Import these for python 3
+# import tkinter as tk
+# from tkinter import ttk
+
+# Import these for python 2
+import Tkinter as tk
+import ttk
+
 import model as mo
 import config as cf
 
