@@ -53,62 +53,106 @@ def check_intersect(p1, q1, p2, q2):
     return False
 
 
-def nearest(city, cities):
+def nearest(city, cities, start, path, visited):
     dis = {}
     for x in cities:
         dis[distance(city, x)] = x
-        sorted_dict = collections.OrderedDict(sorted(dis.items()))
-        # print(sorted_dict)
-    return sorted_dict
+    dis = collections.OrderedDict(sorted(dis.items()))
+    dis[0] = start
+    # print(len(dis))
+    # print(dis)
+    plot_tour(visited)
+    time.sleep(0.5)
+    return dis
 
 
 def checkCross(city, visited):
     for x in range(len(visited) - 1):
-        # print(city)
         if check_intersect(visited[x], visited[x + 1], visited[len(visited) - 1], city):
             return True
     return False
 
 
-def paththing(nextCity, visited, cities):
+def paththing(nextCity, visited, cities, start):
     # print(nextCity)
     # print(cities)
 
     # print(visited)
     path = []
-    if len(cities) is len(visited):
-        if check_intersect(visited[len(visited) - 2], visited[len(visited) - 1], nextCity, visited[0]):
-            print("")
-        else:
-            path.append(nextCity)
-            path.append(visited[0])
+    # if len(cities) is len(visited):
+    #     if check_intersect(visited[len(visited) - 2], visited[len(visited) - 1], nextCity, visited[0]):
+    #         return path
+    #     else:
+    #         path.append(nextCity)
+    #         path.append(visited[0])
 
     if checkCross(nextCity, visited):
+        print('Cros Found!!')
         return path
     path.append(nextCity)
-    # cities.remove(nextCity)
-
     # print(nearest(nextCity, cities).items())
-    for x in nearest(nextCity, cities).items():
+    for x in nearest(nextCity, cities, start, path, visited).items():
+        if len(visited) is 10:
+            # print(start)
+            # print(x[1])
+            if checkCross(x[1], visited):
+                print('Cros detected')
+                return path
+            else:
+                print('PERFECT PATH')
+                break
         # print(x[1])
+        # print(start)
         if x[1] not in visited:
             visited.append(x[1])
             cities.remove(x[1])
-            path.extend(paththing(x[1], visited, cities))
+            path.extend(paththing(x[1], visited, cities, start))
+
             visited.remove(x[1])
             cities.append(x[1])
-            print(path)
-            print(len(path))
-            print('----------------------------------------------------------------------------------------------------------------------------')
-
+            # print(path)
+            # print(len(path))
+            # print('----------------------------------------------------------------------------------------------------------------------------')
     return path
 
+
+def optSwap(route, i, k):
+    new_route = []
+    for x in range(i):
+        new_route.append(route[x])
+    for x in range(k, i - 1, -1):
+        new_route.append(route[x])
+    for x in range(k + 1, len(route)):
+        new_route.append(route[x])
+    return new_route
+
+
+def two_opt(route, start):
+    route.append(start)
+    # improved = True
+    counter = 0
+    while counter < 10:
+        # improved = False
+        best_distance = tour_length(route)
+        for i in range(1, len(route) - 2):
+            for k in range(i + 1, len(route) - 1):
+                new_route = optSwap(route, i, k)
+                new_distance = tour_length(new_route)
+                if new_distance < best_distance:
+                    route = new_route
+                    best_distance = new_distance
+                    # improved = True
+                    counter = 0
+                else:
+                    counter += 1
+
+    return route
 
 def nearest_neighbour(cities):
     cities = list(cities)
     visited = []
     dis = {}
-    start = cities[random.randrange(len(cities))]
+    start = cities[0]
     visited.append(start)
     cities.remove(start)
     while len(cities) is not 0:
@@ -120,14 +164,14 @@ def nearest_neighbour(cities):
         visited.append(dis[min(dis.keys())])
         cities.remove(dis[min(dis.keys())])
         # print(cities)
-        sorted_dict = collections.OrderedDict(sorted(dis.items()))
-        print(sorted_dict)
+        # print(sorted_dict)
         dis.clear()
 
     # print(visited)
     # print(len(visited))
     # print(check_intersect(visited[9], visited[0], visited[5], visited[6]))
-    return visited
+    print(visited)
+    return two_opt(visited, start)
 
 
 def tour_length(tour):
@@ -166,13 +210,16 @@ def plot_tsp(algorithm, cities):
     plot_tour(tour)
 
 
-# plot_tsp(nearest_neighbour, make_cities(10))
+# plot_tsp(nearest_neighbour, make_cities(500))
 
 
 def go(cities):
     cities = list(cities)
     start = cities[random.randrange(len(cities))]
-    return paththing(start, [start], cities)
+    cities.remove(start)
+    return paththing(start, [start], cities, start)
+
+# print(go(make_cities(10)))
+plot_tour(go(make_cities(10)))
 
 
-print(go(make_cities(10)))
