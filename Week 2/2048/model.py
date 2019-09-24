@@ -4,6 +4,7 @@ import math
 
 MAX_DEPTH = 3
 
+
 def merge_left(b):
     # merge the board left
     # this is the funcyoin that is reused in the other merges
@@ -38,6 +39,7 @@ def merge_left(b):
         new_b.append(merged)
     # return [[2, 8, 0, 0], [2, 4, 8, 0], [4, 0, 0, 0], [4, 4, 0, 0]]
     return new_b
+
 
 def merge_right(b):
     # merge the board right
@@ -80,6 +82,7 @@ MERGE_FUNCTIONS = {
     'down': merge_down
 }
 
+
 def move_exists(b):
     # check whether or not a move exists on the board
     # b = [[1, 2, 3, 4], [5, 6, 7, 8]]
@@ -96,6 +99,7 @@ def move_exists(b):
         return True
     else:
         return False
+
 
 def start():
     # make initial board
@@ -126,12 +130,14 @@ def add_two_four(b):
         else:
             continue
 
+
 def game_state(b):
     for i in range(4):
         for j in range(4):
             if b[i][j] >= 2048:
                 return 'win'
     return 'lose'
+
 
 def test():
     b = [[0, 2, 4, 4], [0, 2, 4, 8], [0, 0, 0, 4], [2, 2, 2, 2]]
@@ -151,9 +157,11 @@ def test():
     for i in range(11):
         g.add_two_four(b)
 
+
 def get_random_move(board):
     print(board[0][1])
     return random.choice(list(MERGE_FUNCTIONS.keys()))
+
 
 def get_expectimax_move(board):
     best_value = -9999
@@ -167,10 +175,11 @@ def get_expectimax_move(board):
                 best_value = expectimax_value
                 best_move = move
 
-        # print(best_value)
-        # print(best_move)
+                # print(best_value)
+                # print(best_move)
     print('My move is: {}'.format(best_move))
     return best_move
+
 
 def expectimax(board, depth):
     if game_state(board) == 'win' or depth == 0:
@@ -183,6 +192,7 @@ def expectimax(board, depth):
         best_value = max(best_value, value)
 
     return best_value
+
 
 def heuristic_value(board):
     print(board)
@@ -209,7 +219,7 @@ def heuristic_value(board):
             if board[x][y] > highest_number:
                 highest_number = board[x][y]
     if board[0][0] == highest_number:
-        value += 50
+        value += 100
 
     if board[3][3] == 0:
         value += 10
