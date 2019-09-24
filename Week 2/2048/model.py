@@ -7,7 +7,7 @@ MAX_DEPTH = 3
 def merge_left(b):
     # merge the board left
     # this is the funcyoin that is reused in the other merges
-    # b = [[0, 2, 4, 4], [0, 2, 4, 8], [0, 0, 0, 4], [2, 2, 2, 2]]    
+    # b = [[0, 2, 4, 4], [0, 2, 4, 8], [0, 0, 0, 4], [2, 2, 2, 2]]
     def merge(row, acc):
         # recursive helper for merge_left
 
@@ -106,7 +106,7 @@ def start():
 
 
 def play_move(b, direction):
-    # get merge functin an apply it to board
+    # get merge function an apply it to board
     b = MERGE_FUNCTIONS[direction](b)
     add_two_four(b)
     return b
@@ -151,8 +151,70 @@ def test():
     for i in range(11):
         g.add_two_four(b)
 
-def get_random_move():
+def get_random_move(board):
+    print(board[0][1])
     return random.choice(list(MERGE_FUNCTIONS.keys()))
 
-def get_expectimax_move(b):
-    pass
+def get_expectimax_move(board):
+    best_value = -9999
+    best_move = random.choice(list(MERGE_FUNCTIONS.keys()))
+    for move in list(MERGE_FUNCTIONS.keys()):
+        new_board = play_move(board, move)
+        if new_board != board:
+            expectimax_value = expectimax(new_board, MAX_DEPTH)
+
+            if expectimax_value > best_value:
+                best_value = expectimax_value
+                best_move = move
+
+        # print(best_value)
+        # print(best_move)
+    print('My move is: {}'.format(best_move))
+    return best_move
+
+def expectimax(board, depth):
+    if game_state(board) == 'win' or depth == 0:
+        return heuristic_value(board)
+
+    best_value = -9999
+    for move in list(MERGE_FUNCTIONS.keys()):
+        new_board = play_move(board, move)
+        value = expectimax(new_board, depth - 1)
+        best_value = max(best_value, value)
+
+    return best_value
+
+def heuristic_value(board):
+    print(board)
+    value = 0
+    if game_state(board) == 'win':
+        value += 100
+    last_number = board[0][0]
+    for x in range(1, 4):
+        if board[x][0] < last_number:
+            value += 20
+        last_number = board[x][0]
+
+    if board[3][0] > board[3][1]:
+        value += 15
+
+    last_number = board[3][1]
+    for x in range(2, -1, -1):
+        if board[x][1] < last_number:
+            value += 10
+        last_number = board[x][1]
+    highest_number = 0
+    for x in range(4):
+        for y in range(4):
+            if board[x][y] > highest_number:
+                highest_number = board[x][y]
+    if board[0][0] == highest_number:
+        value += 50
+
+    if board[3][3] == 0:
+        value += 10
+
+    if board[0][0] == 0 or board[0][0] < highest_number:
+        value -= 60
+    print(value)
+    return value
