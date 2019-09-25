@@ -7,18 +7,28 @@ before_words_time = time.time()
 print('\033[95mGoing through words... \033[0m')
 
 # Variables
-# board = [['P', 'I', 'E', 'T', 'A'], ['G', 'A', 'A', 'T', 'E'], ['A', 'T', 'M', 'S', 'F'], ['H', 'U', 'I', 'S', 'A']]
+board = [['P', 'I', 'E', 'T'], ['G', 'A', 'A', 'T'], ['A', 'T', 'M', 'S'], ['H', 'U', 'I', 'S']]
 prefixes = []
 neighbours = [(0, -1), (-1, 0), (1, 0), (0, 1)]
 file = open('words.txt', 'r')
 words = [line.split() for line in file.readlines()]
 seen_prefixes = set(prefixes)
-n = 4
-board = []
-for x in range(n):
-    board.append([random.choice(string.ascii_letters).lower()])
-    for y in range(n-1):
-        board[x].append(random.choice(string.ascii_letters).lower())
+# n = 4
+# board = []
+# for x in range(n):
+#     board.append([random.choice(string.ascii_letters).lower()])
+#     for y in range(n-1):
+#         board[x].append(random.choice(string.ascii_letters).lower())
+for b in board:
+    print(b)
+
+# This bit of code can be used to fill an empty board with random letters for n amount
+# n = 100
+# board = []
+# for x in range(n):
+#     board.append([random.choice(string.ascii_letters).lower()])
+#     for y in range(n-1):
+#         board[x].append(random.choice(string.ascii_letters).lower())
 
 # Stop the timer
 after_words_time = time.time()
