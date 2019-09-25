@@ -9,6 +9,11 @@ Opgave 1:
     Hoeveel paren takken zijn er in een route van N steden?
     Beschrijf op welke manier je kruisende wegen (takken) kan vinden
 
+    je kan kruisendse takken vinden door naar de orientatie van 3 van de 4 punten kijken.
+    als we de punten (p1,q1) en (p2,q2) hebben en de volgende situatie is waar zit er een kruising in.
+    – (p1, q1, p2) en (p1, q1, q2) hebben verschillende orientatie
+    – (p2, q2, p1) en (p2, q2, q1) hebben verschillende orientatie.
+
 Opgave 2:
 c) Een belangrijk aspect voor de kwaliteit van de AI is de heuristiek die het bord evalueert. Waarom is het
 tellen van stenen alleen geen goede evaluatiefunctie? Bedenk en implementeer een betere
