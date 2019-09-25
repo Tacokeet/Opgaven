@@ -222,7 +222,7 @@ def plot_tsp(algorithm, cities):
 
 
 plot_tsp(nearest_neighbour, make_cities(100))
-plot_tsp(two_nearest, make_cities(100))
+# plot_tsp(two_nearest, make_cities(100))
 
 
 def go(cities):
