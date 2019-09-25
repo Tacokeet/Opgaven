@@ -3,7 +3,7 @@ import itertools
 import math
 from copy import deepcopy
 
-MAX_DEPTH = 5
+MAX_DEPTH = 4
 
 def merge_left(b):
     # merge the board left
@@ -232,46 +232,92 @@ def heuristic_value(board):
     value = 0
     if game_state(board) == 'win':
         value += 10000
-    last_number = board[0][0]
-    for x in range(1, 4):
-        if board[x][0] < last_number:
-            value += 20
-        last_number = board[x][0]
-
-    if board[3][0] > board[3][1]:
-        value += 15
-
-    last_number = board[3][1]
-    for x in range(2, -1, -1):
-        if board[x][1] < last_number:
-            value += 10
-        last_number = board[x][1]
-
+    # last_number = board[0][0]
+    # for x in range(1, 4):
+    #     if board[x][0] < last_number:
+    #         value += 20
+    #     last_number = board[x][0]
+    #
+    # if board[3][0] > board[3][1]:
+    #     value += 15
+    #
+    # last_number = board[3][1]
+    # for x in range(2, -1, -1):
+    #     if board[x][1] < last_number:
+    #         value += 10
+    #     last_number = board[x][1]
+    #
+    #
+    # for x in range(4):
+    #     for y in range(4):
+    #         if x - 1 >= 0:
+    #             if board[x-1][y] == board[x][y]:
+    #                 value += 10
+    #         if y - 1 >= 0:
+    #             if board[x][y-1] == board[x][y]:
+    #                 value += 10
+    #         if x + 1 <= 3:
+    #             if board[x+1][y] == board[x][y]:
+    #                 value += 10
+    #         if y + 1 <= 3:
+    #             if board[x][y+1] == board[x][y]:
+    #                 value += 10
+    #
+    #
+    # if board[0][0] == highest_number:
+    #     value += 100
+    #
+    # if board[3][3] == 0:
+    #     value += 10
+    #
+    # if board[0][0] == 0 or board[0][0] < highest_number:
+    #     value -= 100
+    #
     highest_number = 0
     for x in range(4):
         for y in range(4):
-            if x - 1 >= 0:
-                if board[x-1][y] == board[x][y]:
-                    value += 10
-            if y - 1 >= 0:
-                if board[x][y-1] == board[x][y]:
-                    value += 10
-            if x + 1 <= 3:
-                if board[x+1][y] == board[x][y]:
-                    value += 10
-            if y + 1 <= 3:
-                if board[x][y+1] == board[x][y]:
-                    value += 10
             if board[x][y] > highest_number:
                 highest_number = board[x][y]
 
     if board[0][0] == highest_number:
-        value += 100
+        value += 200
+        for x in range(4):
+            if board[x][0] < highest_number and board[x][0] > 31:
+                value += 30
+    else:
+        if board[0][3] == highest_number:
+            value += 100
+            for x in range(4):
+                if board[0][x] < highest_number and board[0][x] > 31:
+                    value += 30
+        else:
+            if board[3][0] == highest_number:
+                value += 100
+                for x in range(4):
+                    if board[3][x] < highest_number and board[3][x] > 31:
+                        value += 30
+            else:
+                if board[3][3] == highest_number:
+                    value += 100
+                    for x in range(4):
+                        if board[x][3] < highest_number and board[x][3] > 31:
+                            value += 30
 
-    if board[3][3] == 0:
-        value += 10
 
-    if board[0][0] == 0 or board[0][0] < highest_number:
-        value -= 100
+    for x in range(4):
+        for y in range(4):
+            if x == 0 or x == 3 or y == 0 or y == 3:
+                if board[x][y] < highest_number and board[x][y] > 32:
+                    value += 5
+            if board[x][y] == 0:
+                value += 40
+            if x > 0 and x < 3 and y > 0 and y < 3:
+                if board[x][y] > 32:
+                    if board[x][y] > 63:
+                        value -= 50
+                    else:
+                        value -= 30
+                if board[x][y] > highest_number:
+                    value -= 70
 
     return value
