@@ -1,6 +1,7 @@
 import random
 import itertools
 import math
+from copy import deepcopy
 
 MAX_DEPTH = 5
 
@@ -219,6 +220,7 @@ def exp_successors(board):
     for x in range(4):
         for y in range(4):
             new_board = list(board)
+            new_board = deepcopy(board)
             if new_board[x][y] == 0:
                 new_board[x][y] = 2
                 successors_2.append(new_board)
