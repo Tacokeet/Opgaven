@@ -30,6 +30,7 @@ def alltours(cities):
             for rest in itertools.permutations(cities - {start})]
 
 
+# Start of my own algorithm
 def orientation(p, q, r):
     val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y)
 
@@ -62,7 +63,6 @@ def nearest(city, cities, start, path, visited):
     # print(len(dis))
     # print(dis)
     plot_tour(visited)
-    time.sleep(0.5)
     return dis
 
 
@@ -116,6 +116,8 @@ def paththing(nextCity, visited, cities, start):
     return path
 
 
+# end of my own algorithm
+
 def optSwap(route, i, k):
     new_route = []
     for x in range(i):
@@ -148,6 +150,7 @@ def two_opt(route, start):
 
     return route
 
+
 def nearest_neighbour(cities):
     cities = list(cities)
     visited = []
@@ -158,20 +161,28 @@ def nearest_neighbour(cities):
     while len(cities) is not 0:
         for x in cities:
             dis[distance(visited[len(visited) - 1], x)] = x
-        # if len(visited) > 2:
-        #
-        # print(dis)
         visited.append(dis[min(dis.keys())])
         cities.remove(dis[min(dis.keys())])
-        # print(cities)
-        # print(sorted_dict)
         dis.clear()
 
-    # print(visited)
-    # print(len(visited))
-    # print(check_intersect(visited[9], visited[0], visited[5], visited[6]))
-    print(visited)
     return two_opt(visited, start)
+
+
+def two_nearest(cities):
+    cities = list(cities)
+    visited = []
+    dis = {}
+    start = cities[0]
+    visited.append(start)
+    cities.remove(start)
+    while len(cities) is not 0:
+        for x in cities:
+            dis[distance(visited[len(visited) - 1], x)] = x
+        visited.append(dis[min(dis.keys())])
+        cities.remove(dis[min(dis.keys())])
+        dis.clear()
+
+    return visited
 
 
 def tour_length(tour):
@@ -210,7 +221,8 @@ def plot_tsp(algorithm, cities):
     plot_tour(tour)
 
 
-# plot_tsp(nearest_neighbour, make_cities(500))
+plot_tsp(nearest_neighbour, make_cities(100))
+plot_tsp(two_nearest, make_cities(100))
 
 
 def go(cities):
@@ -218,8 +230,3 @@ def go(cities):
     start = cities[random.randrange(len(cities))]
     cities.remove(start)
     return paththing(start, [start], cities, start)
-
-# print(go(make_cities(10)))
-plot_tour(go(make_cities(10)))
-
-
