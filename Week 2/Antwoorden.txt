@@ -1,8 +1,34 @@
-Hoeveel procent ligt het resultaat van NN af van de optimale route?
-10%
+Opgave 1:
 
-Hoe lang doet het NN-programma over een route met 500 steden en wat is de totale lengte van de route?
-500 city tour with length 20216.6 in 0.122 secs for nearest_neighbour
+    Hoeveel procent ligt het resultaat van NN af van de optimale route?
+    10%
 
-Hoeveel paren takken zijn er in een route van N steden?
-Beschrijf op welke manier je kruisende wegen (takken) kan vinden
+    Hoe lang doet het NN-programma over een route met 500 steden en wat is de totale lengte van de route?
+    500 city tour with length 20216.6 in 0.122 secs for nearest_neighbour
+
+    Hoeveel paren takken zijn er in een route van N steden?
+    Beschrijf op welke manier je kruisende wegen (takken) kan vinden
+
+    je kan kruisendse takken vinden door naar de orientatie van 3 van de 4 punten kijken.
+    als we de punten (p1,q1) en (p2,q2) hebben en de volgende situatie is waar zit er een kruising in.
+    – (p1, q1, p2) en (p1, q1, q2) hebben verschillende orientatie
+    – (p2, q2, p1) en (p2, q2, q1) hebben verschillende orientatie.
+
+Opgave 2:
+c) Een belangrijk aspect voor de kwaliteit van de AI is de heuristiek die het bord evalueert. Waarom is het
+tellen van stenen alleen geen goede evaluatiefunctie? Bedenk en implementeer een betere
+evaluatiefunctie.
+
+in het spel othello is het ook belangrijk om de hoekjes te pakken, dit moet je dus ook in je heuristische functie verwerken.
+
+d) Wanneer de eis is dat een zet binnen drie seconden moet worden gedaan, tot welke diepte kun je dan
+gaan met Negamax?
+
+tot diepte 3
+Opgave 3:
+b) Wat is de maximale diepte waarbij het programma nog een acceptabele performance heeft? Op welke
+manieren zou je de performance kunnen verbeteren?
+
+maximale diepte is 5 met acceptabele performance.
+
+houd bij welke boarden je al hebt gehad zodat je die niet hoeft te berekenen. soort vorm van pruning.
