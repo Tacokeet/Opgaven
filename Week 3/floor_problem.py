@@ -14,7 +14,7 @@ for (L, M, N, E, J) in list(
     if L is not 4:
         if M is not 0:
             if N is not 0 and N is not 4:
-                if E < M:
+                if E > M:
                     if (J - M) > 2:
                         print("Loes woont op : " + str(L))
                         print("Marja woont op : " + str(M))
