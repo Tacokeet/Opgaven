@@ -131,10 +131,11 @@ def optSwap(route, i, k):
 
 def two_opt(route, start):
     route.append(start)
-    # improved = True
+    improved = True
     counter = 0
-    while counter < 10:
-        # improved = False
+    # while counter < 10:
+    while improved:
+        improved = False
         best_distance = tour_length(route)
         for i in range(1, len(route) - 2):
             for k in range(i + 1, len(route) - 1):
@@ -143,10 +144,10 @@ def two_opt(route, start):
                 if new_distance < best_distance:
                     route = new_route
                     best_distance = new_distance
-                    # improved = True
-                    counter = 0
-                else:
-                    counter += 1
+                    improved = True
+                    # counter = 0
+                # else:
+                #     counter += 1
 
     return route
 
@@ -182,7 +183,7 @@ def two_nearest(cities):
         cities.remove(dis[min(dis.keys())])
         dis.clear()
 
-    return visited
+    return two_opt(visited, start)
 
 
 def tour_length(tour):
@@ -221,8 +222,8 @@ def plot_tsp(algorithm, cities):
     plot_tour(tour)
 
 
-plot_tsp(nearest_neighbour, make_cities(100))
-# plot_tsp(two_nearest, make_cities(100))
+# # plot_tsp(nearest_neighbour, make_cities(100))
+# plot_tsp(two_nearest, make_cities(500))
 
 
 def go(cities):
@@ -230,3 +231,5 @@ def go(cities):
     start = cities[random.randrange(len(cities))]
     cities.remove(start)
     return paththing(start, [start], cities, start)
+
+go(make_cities(10))

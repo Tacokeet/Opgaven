@@ -3,7 +3,8 @@ import itertools
 import math
 from copy import deepcopy
 
-MAX_DEPTH = 5
+MAX_DEPTH = 3
+
 
 def merge_left(b):
     # merge the board left
@@ -39,6 +40,7 @@ def merge_left(b):
         new_b.append(merged)
     # return [[2, 8, 0, 0], [2, 4, 8, 0], [4, 0, 0, 0], [4, 4, 0, 0]]
     return new_b
+
 
 def merge_right(b):
     # merge the board right
@@ -81,6 +83,7 @@ MERGE_FUNCTIONS = {
     'down': merge_down
 }
 
+
 def move_exists(b):
     # check whether or not a move exists on the board
     # b = [[1, 2, 3, 4], [5, 6, 7, 8]]
@@ -97,6 +100,7 @@ def move_exists(b):
         return True
     else:
         return False
+
 
 def start():
     # make initial board
@@ -127,12 +131,14 @@ def add_two_four(b):
         else:
             continue
 
+
 def game_state(b):
     for i in range(4):
         for j in range(4):
             if b[i][j] >= 2048:
                 return 'win'
     return 'lose'
+
 
 def test():
     b = [[0, 2, 4, 4], [0, 2, 4, 8], [0, 0, 0, 4], [2, 2, 2, 2]]
@@ -152,8 +158,10 @@ def test():
     for i in range(11):
         g.add_two_four(b)
 
+
 def get_random_move(board):
     return random.choice(list(MERGE_FUNCTIONS.keys()))
+
 
 def get_expectimax_move(board):
     best_value = -9999
@@ -173,6 +181,7 @@ def get_expectimax_move(board):
     print('expectimax value: {}'.format(expectimax_value))
     return best_move
 
+
 def expectimax(board, depth):
     if game_state(board) == 'win' or depth == 0:
         return heuristic_value(board)
@@ -186,6 +195,7 @@ def expectimax(board, depth):
 
     return best_value
 
+
 def search(board, depth, move):
     if game_state(board) == 'win' or depth == 0:
         return heuristic_value(board)
@@ -194,18 +204,19 @@ def search(board, depth, move):
         a = -9999
         for m in list(MERGE_FUNCTIONS.keys()):
             new_board = MERGE_FUNCTIONS[m](board)
-            a = max(a, search(new_board, depth -1, False))
+            a = max(a, search(new_board, depth - 1, False))
     else:
         a = 0
         successors_2, successors_4 = exp_successors(board)
         successors = successors_2 + successors_4
         for s in successors:
             if s in successors_2:
-                a = a + (0.9 * search(s, depth -1, True)) / len(successors)
+                a = a + (0.9 * search(s, depth - 1, True)) / len(successors)
             else:
-                a = a + (0.1 * search(s, depth -1, True)) / len(successors)
+                a = a + (0.1 * search(s, depth - 1, True)) / len(successors)
 
     return a
+
 
 def expected_value(exp_boards):
     exp_value = 0
@@ -213,6 +224,7 @@ def expected_value(exp_boards):
         exp_value += heuristic_value(s)
     exp_value = exp_value / len(exp_boards)
     return exp_value
+
 
 def exp_successors(board):
     successors_2 = []
@@ -227,6 +239,7 @@ def exp_successors(board):
                 new_board[x][y] = 4
                 successors_4.append(new_board)
     return successors_2, successors_4
+
 
 def heuristic_value(board):
     value = 0
@@ -248,30 +261,50 @@ def heuristic_value(board):
         last_number = board[x][1]
 
     highest_number = 0
+    var = 0
     for x in range(4):
         for y in range(4):
+            if board[x][y] is 0:
+                var += 3
             if x - 1 >= 0:
-                if board[x-1][y] == board[x][y]:
+                if board[x - 1][y] == board[x][y]:
+                    value += 20
+                if board[x - 1][y] == (board[x][y] / 2):
                     value += 10
             if y - 1 >= 0:
-                if board[x][y-1] == board[x][y]:
+                if board[x][y - 1] == board[x][y]:
+                    value += 20
+                if board[x][y - 1] == (board[x][y] / 2):
                     value += 10
             if x + 1 <= 3:
-                if board[x+1][y] == board[x][y]:
+                if board[x + 1][y] == board[x][y]:
+                    value += 20
+                if board[x + 1][y] == (board[x][y] / 2):
                     value += 10
             if y + 1 <= 3:
-                if board[x][y+1] == board[x][y]:
+                if board[x][y + 1] == board[x][y]:
+                    value += 20
+                if board[x][y + 1] == (board[x][y] / 2):
                     value += 10
+
             if board[x][y] > highest_number:
                 highest_number = board[x][y]
 
+    value += var * 10
     if board[0][0] == highest_number:
-        value += 100
-
-    if board[3][3] == 0:
-        value += 10
+        value += 300
+    if board[0][1] == highest_number/2:
+        value += 150
+    if board[1][0] == highest_number/2:
+        value += 150
+    if board[0][1] == (highest_number/2)/2:
+        value += 75
+    if board[1][0] == (highest_number/2)/2:
+        value += 75
+    if board[3][3] == 0 or board[3][2] == 0 or board[2][3] == 0 or board[2][2] == 0:
+        value += var * 4
 
     if board[0][0] == 0 or board[0][0] < highest_number:
-        value -= 100
+        value -= 300
 
     return value
