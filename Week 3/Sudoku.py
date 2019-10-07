@@ -102,6 +102,8 @@ def human_solve(grid):
         for x in to_be_filled[coord]:
             if x[1] == '123456789':
                 continue
+            if x[1] in missing[coord]:
+                continue
             missing[coord].append(x[1])
         if len((set(check).difference(missing[coord]))) == 1:
             print(next(iter(set(check).difference(missing[coord]))), 'is the number for', coord)
@@ -110,15 +112,6 @@ def human_solve(grid):
 
 
 def dfs(grid, empty, next):
-    # for coord in grid:
-    #     if grid[coord] != '123456789':
-    #         continue
-    #     for i in range(1, 10):
-    #         # print(coord, i, no_conflict(grid, coord, str(i)))
-    #         if no_conflict(grid, coord, str(i)):
-    #             print(coord, i)
-    #             # grid[coord] = str(i)
-    #             # break
     if '123456789' not in grid.values():
         print('im done')
         return grid
@@ -134,16 +127,77 @@ def dfs(grid, empty, next):
     return grid
 
 
+def make_arc_consistent(grid, c, v, arc):
+    for p in peers[c]:
+        if p in arc:
+            if v in arc[p]:
+                if len(arc[p]) <= 1:
+                    return False
+                else:
+                    arc[p].remove(v)
+    # find all one values
+    for o in arc:
+        if len(arc[o]) == 1 and o != c:
+            if make_arc_consistent(grid, o, arc[o], arc):
+                return False
+        return True
+
+
+def get_smallest_set(arc):
+    smallest_len = 9
+    for a in arc:
+        if smallest_len > len(arc[a]) > 1:
+            smallest = a
+            smallest_len = len(arc[a])
+    return smallest
+
+
+def arc_dfs(grid, arc):
+    if '123456789' not in grid.values():
+        display(grid)
+        return True
+    s = get_smallest_set(arc)
+    for v in arc[s]:
+        if no_conflict(grid, s, v):
+            new_grid = grid.copy()
+            new_grid[s] = v
+            if make_arc_consistent(new_grid, s, v, arc):
+                if solve(new_grid):
+                    return True
+    return False
+
+
 def solve(grid):
-    # backtracking search a solution (DFS)
-    # your code here
-    # human_solve(grid)
-    empty = []
+    check = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    to_be_filled = {}
+    missing = {}
+    arc = {}
+
+    # Uncomment this for normal dfs and then call dfs
+    # empty = []
+    # for coord in grid:
+    #     if grid[coord] != '123456789':
+    #         continue
+    #     empty.append(coord)
+    #
+    # display(dfs(grid, empty, 0))
+
+    # making data set for arc_dfs
     for coord in grid:
         if grid[coord] != '123456789':
             continue
-        empty.append(coord)
-    display(dfs(grid, empty, 0))
+        to_be_filled[coord] = []
+        missing[coord] = []
+        for number in peers[coord]:
+            to_be_filled[coord].append((number, grid[number]))
+        for x in to_be_filled[coord]:
+            if x[1] == '123456789':
+                continue
+            if x[1] in missing[coord]:
+                continue
+            missing[coord].append(x[1])
+        arc[coord] = set(check).difference(missing[coord])
+    arc_dfs(grid, arc)
     pass
 
 
@@ -172,8 +226,8 @@ slist[19] = '1.....3.8.7.4..............2.3.1...........958.........5.6...7.....
 
 for i, sudo in enumerate(slist):
     print('* sudoku {0} *'.format(i))
-    print(sudo)
     d = parse_string_to_dict(sudo)
+    display(d)
     start_time = time.time()
     solve(d)
     end_time = time.time()
@@ -181,7 +235,4 @@ for i, sudo in enumerate(slist):
     minutes, seconds = divmod(rem, 60)
     print("duration [hh:mm:ss.ddd]: {:0>2}:{:0>2}:{:06.3f}".format(int(hours), int(minutes), seconds))
     print()
-# board = parse_string_to_dict(slist[0])
-# board = parse_string_to_dict(slist[0])
-# display(board)
-# solve(board)
+

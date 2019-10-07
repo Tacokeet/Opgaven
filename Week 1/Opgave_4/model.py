@@ -73,23 +73,37 @@ class Node:
         self.heuristic = heuristic
 
 
+
 def decide_priority(s_node):
-    return cf.SIZE - s_node[0] + cf.SIZE - s_node[1]
+    # return cf.SIZE - s_node[0] + cf.SIZE - s_node[1]
+    return (
+        (cf.SIZE - 1 - s_node[0]) ** 2
+    ) + (
+        (cf.SIZE - 1 - s_node[1]) ** 2
+    )
 
 
 def search(app, start, goal):
     frontier = PriorityQueue()
+    node_dict = {}
     parent_node = Node((0,0), cf.SIZE + cf.SIZE, parent=None)
+    node_dict[(0,0)] = parent_node
     frontier.put(item=parent_node, priority=cf.SIZE+cf.SIZE)
     visited = set()
     path = []
 
     while not frontier.empty():
         s = frontier.get()
+        if s.coords in visited:
+            continue
         if not s.coords == (0,0): # start node
-            parent_node = Node(s.coords, decide_priority(s.coords), parent_node)
-        print(s.coords)
-        print('{}, {} '.format(cf.SIZE -1,cf.SIZE -1))
+            if s.coords in node_dict:
+                parent_node = node_dict[s.coords]
+            else:
+                parent_node = Node(s.coords, decide_priority(s.coords), parent_node)
+                if app.alg.get() != "A*":
+                    parent_node.heuristic = 0
+                node_dict[s.coords] = parent_node
         if s.coords == (cf.SIZE -1, cf.SIZE -1):
             current_node = s
             while current_node is not None:
@@ -102,21 +116,18 @@ def search(app, start, goal):
             app.plot_node(s.coords, 'pink')
             for successor in successors(s.coords):
                 if successor not in visited:
-                    successor_node = Node(successor, decide_priority(successor), parent_node)
+                    if successor in node_dict:
+                        successor_node = node_dict[successor]
+                    else:
+                        successor_node = Node(successor, decide_priority(successor), parent_node)
+                        if app.alg.get() != "A*":
+                            successor_node.heuristic = 0
+                        node_dict[successor] = successor_node
                     successor_node.current_cost = successor_node.parent.current_cost + 1
                     frontier.put(successor_node, successor_node.current_cost + successor_node.heuristic)
                     app.plot_node(successor, cf.PATH_C)
-                    # app.plot_line_segment(s[0], s[1], successor[0], successor[1], color=cf.FINAL_C)
                     app.pause()
 
     for x in range(len(path)):
         x = x + 1
         app.plot_line_segment(path[x - 1][0], path[x - 1][1], path[x][0], path[x][1], color=cf.FINAL_C)
-
-    # plot a sample path for demonstration
-    # for i in range(cf.SIZE-1):
-    #     #app.plot_line_segment(i, i, i, i-1, color=cf.PATH_C)
-    #     #app.plot_line_segment(i, i, i, i+2, color=cf.PATH_C)
-    #     #app.plot_line_segment(i, i, i, i+1, color=cf.FINAL_C)
-    #     app.plot_line_segment(i, i+1, i+1, i+1, color=cf.FINAL_C)
-    #     app.pause()
