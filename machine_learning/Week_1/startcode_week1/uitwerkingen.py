@@ -102,7 +102,8 @@ def contourPlot(X, y):
     T1, T2 = np.meshgrid(t1, t2)
     J_vals = np.zeros((len(t2), len(t2)))
     for x in range(len(t1)):
-        J_vals[x] = computeCost(X, y, np.array([t1[x], t2[x]]))
+        for i in range(len(t2)):
+            J_vals[x][i] = computeCost(X, y, np.array([t1[x], t2[i]]))
     surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
     xLabel = ax.set_xlabel(r'$\theta_0$', linespacing=3.2)
