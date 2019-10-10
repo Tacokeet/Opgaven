@@ -46,7 +46,6 @@ def computeCost(X, y, theta):
     #    3. bereken het verschil tussen deze voorspelling en de werkelijke waarde
     #    4. kwadrateer dit verschil
     #    5. tal al deze kwadraten bij elkaar op en deel dit door twee keer het aantal datapunten
-    print(theta)
     predictions = np.dot(X, theta)
     errors = (predictions - y) ** 2
     sum_error = sum(errors)
