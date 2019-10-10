@@ -14,7 +14,7 @@ def cross(A, B):
 # D
 # ..
 # I
-
+arc = {}
 digits = '123456789'
 rows = 'ABCDEFGHI'
 cols = digits
@@ -127,23 +127,29 @@ def dfs(grid, empty, next):
     return grid
 
 
-def make_arc_consistent(grid, c, v, arc):
+def make_arc_consistent(grid, c, v):
+    # print(v, c, peers[c])
     for p in peers[c]:
         if p in arc:
+            # print(p, arc[p])
             if v in arc[p]:
                 if len(arc[p]) <= 1:
                     return False
                 else:
                     arc[p].remove(v)
     # find all one values
+    # print(arc)
     for o in arc:
+        # print(o, len(arc[o]))
         if len(arc[o]) == 1 and o != c:
-            if make_arc_consistent(grid, o, arc[o], arc):
+            # print(o, c)
+            # print(o, arc[o])
+            if not make_arc_consistent(grid, o, arc[o]):
                 return False
-        return True
+    return True
 
 
-def get_smallest_set(arc):
+def get_smallest_set():
     smallest_len = 9
     for a in arc:
         if smallest_len > len(arc[a]) > 1:
@@ -152,17 +158,33 @@ def get_smallest_set(arc):
     return smallest
 
 
-def arc_dfs(grid, arc):
+def test():
+    t = False
+    for a in arc:
+        if len(arc[a]) == 1:
+            t = True
+        else:
+            t = False
+    return t
+
+
+def arc_dfs(grid):
     if '123456789' not in grid.values():
+        print('im done')
+        print(grid)
         display(grid)
         return True
-    s = get_smallest_set(arc)
+    # if test():
+    #     print(grid)
+    #     display(grid)
+    #     return True
+    s = get_smallest_set()
     for v in arc[s]:
         if no_conflict(grid, s, v):
             new_grid = grid.copy()
             new_grid[s] = v
-            if make_arc_consistent(new_grid, s, v, arc):
-                if solve(new_grid):
+            if make_arc_consistent(new_grid, s, v):
+                if arc_dfs(new_grid):
                     return True
     return False
 
@@ -171,8 +193,6 @@ def solve(grid):
     check = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
     to_be_filled = {}
     missing = {}
-    arc = {}
-
     # Uncomment this for normal dfs and then call dfs
     # empty = []
     # for coord in grid:
@@ -197,7 +217,9 @@ def solve(grid):
                 continue
             missing[coord].append(x[1])
         arc[coord] = set(check).difference(missing[coord])
-    arc_dfs(grid, arc)
+    print(arc)
+    arc_dfs(grid)
+    arc.clear()
     pass
 
 
@@ -235,4 +257,3 @@ for i, sudo in enumerate(slist):
     minutes, seconds = divmod(rem, 60)
     print("duration [hh:mm:ss.ddd]: {:0>2}:{:0>2}:{:06.3f}".format(int(hours), int(minutes), seconds))
     print()
-
