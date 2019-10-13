@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import csr_matrix
 
+
 # ==== OPGAVE 1 ====
 def plotNumber(nrVector):
     # Let op: de manier waarop de data is opgesteld vereist dat je gebruik maakt
@@ -9,8 +10,10 @@ def plotNumber(nrVector):
     # laatste index het langzaamst; als je dat niet doet, wordt het plaatje 
     # gespiegeld en geroteerd. Zie de documentatie op 
     # https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
-
+    plt.matshow(np.reshape(nrVector, (20, 20), order='F'))
+    plt.show()
     pass
+
 
 # ==== OPGAVE 2a ====
 def sigmoid(z):
@@ -32,7 +35,7 @@ def get_y_matrix(y, m):
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
 
-    pass 
+    pass
 
 
 # ==== OPGAVE 2c ==== 
@@ -63,7 +66,6 @@ def predictNumber(Theta1, Theta2, X):
     pass
 
 
-
 # ===== deel 2: =====
 def computeCost(Theta1, Theta2, X, y):
     # Deze methode maakt gebruik van de methode predictNumber() die je hierboven hebt
@@ -78,29 +80,29 @@ def computeCost(Theta1, Theta2, X, y):
     pass
 
 
-
 # ==== OPGAVE 3a ====
-def sigmoidGradient(z): 
+def sigmoidGradient(z):
     # Retourneer hier de waarde van de afgeleide van de sigmoïdefunctie.
     # Zie de opgave voor de exacte formule. Zorg ervoor dat deze werkt met
     # scalaire waarden en met vectoren.
 
     pass
 
+
 # ==== OPGAVE 3b ====
-def nnCheckGradients(Theta1, Theta2, X, y): 
+def nnCheckGradients(Theta1, Theta2, X, y):
     # Retourneer de gradiënten van Theta1 en Theta2, gegeven de waarden van X en van y
     # Zie het stappenplan in de opgaven voor een mogelijke uitwerking.
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
-    m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    m = 1  # voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
 
-    for i in range(m): 
-        #YOUR CODE HERE
+    for i in range(m):
+        # YOUR CODE HERE
         pass
 
     Delta2_grad = Delta2 / m
     Delta3_grad = Delta3 / m
-    
+
     return Delta2_grad, Delta3_grad
