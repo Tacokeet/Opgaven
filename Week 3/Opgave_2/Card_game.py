@@ -29,10 +29,12 @@ spots = (0, 1, 2, 3, 4, 5, 6, 7)
 #   1 2 3 -
 #   - 4 5 6
 #   - - 7 -
+#
+print("Aantal permutaties: {}".format(len(set(permutations(cards)))))
 
 def brute_force(board):
     count_permutations = 0
-    for spots in list(permutations(cards)):
+    for spots in set(permutations(cards)):
         count_permutations += 1
         # Aanmaken van het bord
         for x in range(8):
