@@ -2,7 +2,7 @@ import numpy as np
 import sys
 import pickle
 
-from uitwerkingen import *
+from machine_learning.Week_1.startcode_week1.uitwerkingen import *
 
 '''
 Onderstaande regels laden het pickle-bestand in waarin de data is opgeslagen.

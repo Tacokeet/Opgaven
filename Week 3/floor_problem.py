@@ -1,4 +1,5 @@
 import itertools
+import time
 
 '''
 Rule set Floor Puzzle:
@@ -9,6 +10,7 @@ E at least 1 higher than M
 J not neighbour of M
 
 '''
+start = time.time()
 for (L, M, N, E, J) in list(
         itertools.permutations([0, 1, 2, 3, 4])):
     if L is not 4:
@@ -22,4 +24,5 @@ for (L, M, N, E, J) in list(
                         print("Erik woont op : " + str(E))
                         print("Joep woont op : " + str(J))
                         print("----------------------------------")
-
+end = time.time()
+print("\nTotal elapsed time: " + str(end - start))
