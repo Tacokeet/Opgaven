@@ -34,15 +34,14 @@ def get_y_matrix(y, m):
     # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
-    print(y)
-    print(m)
+
     # x = length of y
 
     cols = [i[0] if i[0] < 10 else 0 for i in y]
     rows = [i for i in range(len(cols))]
     data = [1 for _ in range(len(cols))]
     X = max(cols) + 1
-    print(csr_matrix((data, (rows, cols)), shape=(m, X)).toarray())
+    # print(csr_matrix((data, (rows, cols)), shape=(m, X)).toarray())
     return csr_matrix((data, (rows, cols)), shape=(m, X)).toarray()
     pass
 
