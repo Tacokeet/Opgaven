@@ -21,7 +21,7 @@ def sigmoid(z):
     # voor dat de code zowel werkt wanneer z een getal is als wanneer z een
     # vector is.
     # Maak gebruik van de methode exp() in NumPy.
-    return 1/(1 + np.exp(-z))
+    return 1 / (1 + np.exp(-z))
 
 
 # ==== OPGAVE 2b ====
@@ -82,7 +82,7 @@ def predictNumber(Theta1, Theta2, X):
     z2 = np.dot(a1, Theta1.T)
     a2 = sigmoid(z2)
     a2 = np.c_[ones, a2]
-    z3 = np.dot(a2, Theta2.T) # shapes (5000,25) and (26,10) not aligned: 25 (dim 1) != 26 (dim 0)
+    z3 = np.dot(a2, Theta2.T)  # shapes (5000,25) and (26,10) not aligned: 25 (dim 1) != 26 (dim 0)
     a2 = np.c_[ones, z3]
     return sigmoid(z3)
 
@@ -109,7 +109,7 @@ def computeCost(Theta1, Theta2, X, y):
     # kost_van_het_netwerk = gemiddelde_fout * sum(sum(actuele_waarde * hypothese + (1 - actuele_waarde * min_hypothese)))
 
     kost_van_het_netwerk = sum(sum(y_matrix * np.log(prediction) + ((1 - y_matrix) * np.log(1 - prediction))))
-    kost_van_het_netwerk = -(1/m) * kost_van_het_netwerk
+    kost_van_het_netwerk = -(1 / m) * kost_van_het_netwerk
 
     return kost_van_het_netwerk
 
@@ -120,7 +120,7 @@ def sigmoidGradient(z):
     # Zie de opgave voor de exacte formule. Zorg ervoor dat deze werkt met
     # scalaire waarden en met vectoren.
 
-    pass
+    return sigmoid(z) * (1 - sigmoid(z))
 
 
 # ==== OPGAVE 3b ====
@@ -130,13 +130,36 @@ def nnCheckGradients(Theta1, Theta2, X, y):
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
-    m = 1  # voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    # m = 1  # voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+
+    m, n = X.shape
+    print(m)
+    print(n)
+    predict = predictNumber(Theta1, Theta2, X)
+    y_matrix = get_y_matrix(y, m)
+    delta_end = predict - y_matrix
+    # a1 = np.c_[X]
+    # z2 = np.dot(a1, Theta1.T)
+    # a2 = sigmoid(z2)
+    # a2 = np.c_[a2]
+    # z3 = np.dot(a2, Theta2.T)  # shapes (5000,25) and (26,10) not aligned: 25 (dim 1) != 26 (dim 0)
+    # a2 = np.c_[z3]
 
     for i in range(m):
+        curr = X[i].reshape(400, 1)
+        a1 = np.c_[np.ones(len(curr.T)), curr.T]
+        z2 = np.dot(a1, Theta1.T)
+        delta_end = delta_end[i].reshape(10, 1)
+        DELTA = 'Weight of all second layer'
+        # delta(2) = (DELTA(2).T dot delta_end * sigmoidGradient(z(2))
+        print(np.dot(DELTA.T, delta_end) * sigmoidGradient(z2))
         # YOUR CODE HERE
+        # Delta2 += np.dot(delta_end * sigmoidGradient(z2))
+        # Delta3 += np.dot(delta_end * sigmoidGradient(z3))
         pass
 
     Delta2_grad = Delta2 / m
     Delta3_grad = Delta3 / m
 
     return Delta2_grad, Delta3_grad
+
