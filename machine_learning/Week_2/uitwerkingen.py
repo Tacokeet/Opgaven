@@ -108,10 +108,8 @@ def computeCost(Theta1, Theta2, X, y):
     #
     # kost_van_het_netwerk = gemiddelde_fout * sum(sum(actuele_waarde * hypothese + (1 - actuele_waarde * min_hypothese)))
 
-    kost_van_het_netwerk = sum(sum(- y_matrix * np.log(prediction) - ((1 - y_matrix) * np.log(1 - prediction))))
-    kost_van_het_netwerk = (1/m) * kost_van_het_netwerk
-    # Als ik de min voor de 1/m weghaal klopt het wel, maar anders krijg ik een min-waarde terwijl
-    # de tekst zegt dat het rond de 7 (positief) moet zijn.
+    kost_van_het_netwerk = sum(sum(y_matrix * np.log(prediction) + ((1 - y_matrix) * np.log(1 - prediction))))
+    kost_van_het_netwerk = -(1/m) * kost_van_het_netwerk
 
     return kost_van_het_netwerk
 
