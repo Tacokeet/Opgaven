@@ -22,7 +22,6 @@ def sigmoid(z):
     # vector is.
     # Maak gebruik van de methode exp() in NumPy.
     return 1/(1 + np.exp(-z))
-    pass
 
 
 # ==== OPGAVE 2b ====
@@ -71,21 +70,50 @@ def predictNumber(Theta1, Theta2, X):
     # Voeg enen toe aan het begin van elke stap en reshape de uiteindelijke
     # vector zodat deze dezelfde dimensionaliteit heeft als y in de exercise.
 
-    pass
+    # ones = np.ones(len(X))
+    # a1 = np.c_[ones, X]
+    # a2 = sigmoid(a1)
+    # a2 = np.c_[ones, a2]
+    # return sigmoid(a2)
+
+    # wat doen de z-dingen..?
+    ones = np.ones(len(X))
+    a1 = np.c_[ones, X]
+    z2 = np.dot(a1, Theta1.T)
+    a2 = sigmoid(z2)
+    a2 = np.c_[ones, a2]
+    z3 = np.dot(a2, Theta2.T) # shapes (5000,25) and (26,10) not aligned: 25 (dim 1) != 26 (dim 0)
+    a2 = np.c_[ones, z3]
+    return sigmoid(z3)
 
 
 # ===== deel 2: =====
 def computeCost(Theta1, Theta2, X, y):
     # Deze methode maakt gebruik van de methode predictNumber() die je hierboven hebt
-    # geïmplementeerd. Hier wordt het voorspelde getal vergeleken met de werkelijk 
+    # geïmplementeerd. Hier wordt het voorspelde getal vergeleken met de werkelijk
     # waarde (die in de parameter y is meegegeven) en wordt de totale kost van deze
     # voorspelling (dus met de huidige waarden van Theta1 en Theta2) berekend en
     # geretourneerd.
-    # Let op: de y die hier binnenkomt is de m×1-vector met waarden van 1...10. 
+    # Let op: de y die hier binnenkomt is de m×1-vector met waarden van 1...10.
     # Maak gebruik van de methode get_y_matrix() die je in opgave 2a hebt gemaakt
-    # om deze om te zetten naar een matrix. 
+    # om deze om te zetten naar een matrix.
+    m, n = X.shape
+    y_matrix = get_y_matrix(y, m)
+    prediction = predictNumber(Theta1, Theta2, X)
 
-    pass
+    # actuele_waarde = y_matrix
+    # hypothese = np.log(prediction)
+    # min_hypothese = np.log(1 - prediction)
+    # gemiddelde_fout = -(1/m)
+    #
+    # kost_van_het_netwerk = gemiddelde_fout * sum(sum(actuele_waarde * hypothese + (1 - actuele_waarde * min_hypothese)))
+
+    kost_van_het_netwerk = sum(sum(- y_matrix * np.log(prediction) - ((1 - y_matrix) * np.log(1 - prediction))))
+    kost_van_het_netwerk = (1/m) * kost_van_het_netwerk
+    # Als ik de min voor de 1/m weghaal klopt het wel, maar anders krijg ik een min-waarde terwijl
+    # de tekst zegt dat het rond de 7 (positief) moet zijn.
+
+    return kost_van_het_netwerk
 
 
 # ==== OPGAVE 3a ====
