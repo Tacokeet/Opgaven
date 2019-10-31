@@ -6,9 +6,9 @@ from scipy.sparse import csr_matrix
 # ==== OPGAVE 1 ====
 def plotNumber(nrVector):
     # Let op: de manier waarop de data is opgesteld vereist dat je gebruik maakt
-    # van de Fortran index-volgorde – de eerste index verandert het snelst, de 
-    # laatste index het langzaamst; als je dat niet doet, wordt het plaatje 
-    # gespiegeld en geroteerd. Zie de documentatie op 
+    # van de Fortran index-volgorde – de eerste index verandert het snelst, de
+    # laatste index het langzaamst; als je dat niet doet, wordt het plaatje
+    # gespiegeld en geroteerd. Zie de documentatie op
     # https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
     plt.matshow(np.reshape(nrVector, (20, 20), order='F'))
     plt.show()
@@ -31,7 +31,7 @@ def get_y_matrix(y, m):
     # Let op: de gegeven vector y is 1-based en de gevraagde matrix is 0-based,
     # dus als y_i=1, dan moet regel i in de matrix [1,0,0, ... 0] zijn, als
     # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
-    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
+    # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van
     # y en m
 
     # x = length of y
@@ -45,17 +45,17 @@ def get_y_matrix(y, m):
     pass
 
 
-# ==== OPGAVE 2c ==== 
+# ==== OPGAVE 2c ====
 # ===== deel 1: =====
 def predictNumber(Theta1, Theta2, X):
     # Deze methode moet een matrix teruggeven met de output van het netwerk
-    # gegeven de waarden van Theta1 en Theta2. Elke regel in deze matrix 
+    # gegeven de waarden van Theta1 en Theta2. Elke regel in deze matrix
     # is de waarschijnlijkheid dat het sample op die positie (i) het getal
     # is dat met de kolom correspondeert.
 
     # De matrices Theta1 en Theta2 corresponderen met het gewicht tussen de
     # input-laag en de verborgen laag, en tussen de verborgen laag en de
-    # output-laag, respectievelijk. 
+    # output-laag, respectievelijk.
 
     # Een mogelijk stappenplan kan zijn:
 
@@ -132,34 +132,27 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     Delta3 = np.zeros(Theta2.shape)
     # m = 1  # voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
 
+    # Data prep
     m, n = X.shape
-    print(m)
-    print(n)
-    predict = predictNumber(Theta1, Theta2, X)
     y_matrix = get_y_matrix(y, m)
-    delta_end = predict - y_matrix
-    # a1 = np.c_[X]
-    # z2 = np.dot(a1, Theta1.T)
-    # a2 = sigmoid(z2)
-    # a2 = np.c_[a2]
-    # z3 = np.dot(a2, Theta2.T)  # shapes (5000,25) and (26,10) not aligned: 25 (dim 1) != 26 (dim 0)
-    # a2 = np.c_[z3]
+    ones = np.ones((len(X),1))
+    a1 = np.c_[ones, X]
+    z2 = np.dot(a1, Theta1.T)
+    a2 = sigmoid(z2)
+
+    a2 = np.c_[ones, a2]
+    z3 = np.dot(a2, Theta2.T)
+    a3 = sigmoid(z3)
 
     for i in range(m):
-        curr = X[i].reshape(400, 1)
-        a1 = np.c_[np.ones(len(curr.T)), curr.T]
-        z2 = np.dot(a1, Theta1.T)
-        delta_end = delta_end[i].reshape(10, 1)
-        DELTA = 'Weight of all second layer'
-        # delta(2) = (DELTA(2).T dot delta_end * sigmoidGradient(z(2))
-        print(np.dot(DELTA.T, delta_end) * sigmoidGradient(z2))
-        # YOUR CODE HERE
-        # Delta2 += np.dot(delta_end * sigmoidGradient(z2))
-        # Delta3 += np.dot(delta_end * sigmoidGradient(z3))
-        pass
+        delta3 = a3[i] - y_matrix[i]
+
+        delta2 = np.dot(Theta2.T, delta3) * sigmoidGradient(a2[i])
+
+        Delta2 += np.dot(delta2.reshape(-1, 1), a1[i].reshape(1, -1))[1:, :]
+        Delta3 += np.dot(delta3.reshape(-1, 1), a2[i].reshape(1, -1))
 
     Delta2_grad = Delta2 / m
     Delta3_grad = Delta3 / m
 
     return Delta2_grad, Delta3_grad
-
