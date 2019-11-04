@@ -144,6 +144,8 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     z3 = np.dot(a2, Theta2.T)
     a3 = sigmoid(z3)
 
+    print(a2)
+
     for i in range(m):
         delta3 = a3[i] - y_matrix[i]
 
