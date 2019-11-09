@@ -135,7 +135,8 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     # Data prep
     m, n = X.shape
     y_matrix = get_y_matrix(y, m)
-    ones = np.ones((len(X),1))
+
+    ones = np.ones((len(X), 1))
     a1 = np.c_[ones, X]
     z2 = np.dot(a1, Theta1.T)
     a2 = sigmoid(z2)
@@ -144,12 +145,13 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     z3 = np.dot(a2, Theta2.T)
     a3 = sigmoid(z3)
 
-    print(a2)
+    z2 = np.c_[ones, z2]
+
 
     for i in range(m):
         delta3 = a3[i] - y_matrix[i]
 
-        delta2 = np.dot(Theta2.T, delta3) * sigmoidGradient(a2[i])
+        delta2 = np.dot(Theta2.T, delta3) * sigmoidGradient(z2[i])
 
         Delta2 += np.dot(delta2.reshape(-1, 1), a1[i].reshape(1, -1))[1:, :]
         Delta3 += np.dot(delta3.reshape(-1, 1), a2[i].reshape(1, -1))

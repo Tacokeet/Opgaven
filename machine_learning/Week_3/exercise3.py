@@ -67,21 +67,17 @@ print ("Bepalen van de confusion matrix van het getrainde netwerk.")
 pred = np.argmax(model.predict(test_images), axis=1)
 cm = confMatrix(test_labels, pred)
 
-sess = tf.Session()
-with sess.as_default():
-    data = cm.eval() 
-
 print ("De confusion matrix:") 
 if (len(sys.argv)>1 and sys.argv[1]=='skip') :
     print ("Tekenen slaan we over")
 else:
-    plotMatrix(data)
+    plotMatrix(cm)
   
-print (data)
-print (data.shape)
+print (cm)
+print (cm.shape)
 
 print ("Bepalen van de tp, tn, fp, fn")
-metrics = confEls(data,labels)
+metrics = confEls(cm,labels)
 print (metrics)
 print ("Bepalen van de scores:")
 scores = confData(metrics)
