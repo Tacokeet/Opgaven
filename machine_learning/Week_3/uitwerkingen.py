@@ -74,6 +74,7 @@ def confMatrix(labels, pred):
         name=None
     )
 
+
 # OPGAVE 2b
 def confEls(conf, labels):
     # Deze methode krijgt een confusion matrix mee (conf) en een set van labels. Als het goed is, is 
@@ -86,8 +87,32 @@ def confEls(conf, labels):
 
     # Check de documentatie van numpy diagonal om de eerste waarde te bepalen.
 
-    # YOUR CODE HERE
-    print('need code')
+    print(conf)
+    print(labels)
+    tp = np.diag(conf)
+    # tf.print("TP ", tp)
+
+    fp = []
+    for i in range(len(labels)):
+        fp.append(sum(conf[:, i]) - conf[i, i])
+    # tf.print("FP ", fp)
+    fn = []
+    for i in range(len(labels)):
+        fn.append(sum(conf[i, :]) - conf[i, i])
+    # tf.print("FN ", fn)
+
+    tn = []
+    for i in range(len(labels)):
+        temp = np.delete(conf, i, 0)  # delete ith row
+        temp = np.delete(temp, i, 1)  # delete ith column
+        tn.append(sum(sum(temp)))
+    # tf.print("TN ", tn)
+
+    retur = []
+    for i in range(len(labels)):
+        retur.append((("Categorie", labels[i]), ("tp", tp[i]), ("fp", fp[i]), ("fn", fn[i]), ("tn", tn[i])))
+
+    return retur
 
 
 # OPGAVE 2c
@@ -98,14 +123,38 @@ def confData(metrics):
     # vorm van een dictionary (de scaffold hiervan is gegeven).
 
     # VERVANG ONDERSTAANDE REGELS MET JE EIGEN CODE
-
-    tp = 1
-    fp = 1
-    fn = 1
-    tn = 1
-
+    tp = 0
+    for i in range(len(metrics)):
+        tp += metrics[i][1][1]
+    tp = tp / len(metrics)
+    fp = 0
+    for i in range(len(metrics)):
+        fp += metrics[i][2][1]
+    fp = fp / len(metrics)
+    fn = 0
+    for i in range(len(metrics)):
+        fn += metrics[i][3][1]
+    fn = fn / len(metrics)
+    tn = 0
+    for i in range(len(metrics)):
+        tn += metrics[i][4][1]
+    tn = tn / len(metrics)
     # BEREKEN HIERONDER DE JUISTE METRIEKEN EN RETOURNEER DIE 
     # ALS EEN DICTIONARY
 
+    # print("Printing total sum of stuff")
+    # print(tp)
+    # print("=-=-=-=-=-=-")
+    # print(fp)
+    # print("=-=-=-=-=-=-")
+    # print(fn)
+    # print("=-=-=-=-=-=-")
+    # print(tn)
+    # print("=-=-=-=-=-=-")
     rv = {'tpr': 0, 'ppv': 0, 'tnr': 0, 'fpr': 0}
+
+    rv["tpr"] = tp / (tp + fn)
+    rv["ppv"] = tp / (tp + fp)
+    rv["tnr"] = tn / (tn + fp)
+    rv["fpr"] = fp / (fp + tn)
     return rv
